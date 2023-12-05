@@ -87,3 +87,22 @@ def double_odd_indices(numbers)
 end
 
 p double_odd_indices(my_numbers)
+
+def multiply(numbers, value)
+  counter = 0
+  products = []
+  
+  loop do
+    break if counter == numbers.size
+
+    current_number = numbers[counter]
+    current_number *= value
+    products << current_number 
+
+    counter += 1
+  end
+
+  products
+end
+
+p multiply(my_numbers, 3)
