@@ -68,4 +68,22 @@ def double_odd_numbers(numbers)
 end
 
 p double_odd_numbers(my_numbers)
- 
+
+def double_odd_indices(numbers)
+  counter = 0
+  new_numbers = []
+  
+  loop do
+    break if counter == numbers.size
+
+    current_number = numbers[counter]
+    current_number *= 2 if counter.odd?
+    new_numbers << current_number 
+
+    counter += 1
+  end
+
+  new_numbers
+end
+
+p double_odd_indices(my_numbers)
