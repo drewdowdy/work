@@ -47,3 +47,25 @@ end
 
 double_numbers!(my_numbers)
 p my_numbers
+
+my_numbers = [1, 4, 3, 7, 2, 6]
+
+def double_odd_numbers(numbers)
+  counter = 0
+  new_numbers = []
+  
+  loop do
+    break if counter == numbers.size
+
+    current_number = numbers[counter]
+    current_number *= 2 if current_number.odd?
+    new_numbers << current_number 
+
+    counter += 1
+  end
+
+  new_numbers
+end
+
+p double_odd_numbers(my_numbers)
+ 
