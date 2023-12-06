@@ -73,4 +73,58 @@ end
 end
 # => { "ant" => :a, "bear" => :b, "cat" => :c }
 
+# ====================
+# `Enumerable#first`
+#   - returns the first element of a collection
+#   - if given an integer, returns the specified number of elements
+# ====================
 
+[1, 2, 3].first
+# => 1
+
+{ a: "ant", b: "bear", c: "cat" }.first(2) # rare with hashes
+# => [[:a, "ant"], [:b, "bear"]]
+
+# ====================
+# `Enumerable#include?`
+#   - returns boolean `true` if argument exists in the collection
+#   - for hashes, intention is not explicit
+#     - preferences: `Hash#key?` > `Hash#has_key?` > `Enumerable#include?`
+#                    `Hash#value?` > `Hash#has_value?` > hash.value.include?
+# ====================
+
+[1, 2, 3].include?(1)
+# => true
+
+{ a: "ant", b: "bear", c: "cat" }.include?("ant") # for hashes, `include?` only checks keys
+# => false
+
+{ a: "ant", b: "bear", c: "cat" }.include?(:a)    # for hashes, `include?` only checks keys
+# => true
+
+# ====================
+# `Enumerable#partition`
+#   - divides elements into two collections depending on the return value of the block
+#   - for hashes, returns a nested array
+#     - can convert back to hash with `Array#to_h`
+# ====================
+
+[1, 2, 3].partition do |num|
+  num.odd?
+end
+# => [[1, 3], [2]]
+
+odd, even = [1, 2, 3].partition do |num|
+  num.odd?
+end
+
+odd  # => [1, 3]
+even # => [2]
+
+long, short = { a: "ant", b: "bear", c: "cat" }.partition do |key, value|
+  value.size > 3
+end
+# => [[[:b, "bear"]], [[:a, "ant"], [:c, "cat"]]]
+
+long.to_h # => { :b => "bear" }
+short.to_h  # => { :a => "ant", :c => "cat" }
