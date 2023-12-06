@@ -24,3 +24,15 @@ while condition
 end
 
 puts numbers                      # outputs all numbers on new lines
+
+# ====================
+# Simpler Solution
+# ====================
+
+numbers = []
+
+while numbers.size < 5 # use the array size as the condition
+  numbers << rand(99)  # add random number up to 99 to `numbers` array each iteration
+end
+
+puts numbers           # output the elements on new lines
