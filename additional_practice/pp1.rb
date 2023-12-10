@@ -10,7 +10,9 @@ Problem:
 
 Examples:
 
-  {"Fred"=>1, "Barney"=>2, "Wilma"=>3, "Betty"=>4, "Pebbles"=>5, "BamBam"=>6}
+  {"Fred"=>1, "Barney"=>2, "Wilma"=>3, "Betty"=>4, "Pebbles"=>5, "BamBam"=>6} (?)
+  OR
+  {"Fred"=>0, "Barney"=>1, "Wilma"=>2, "Betty"=>3, "Pebbles"=>4, "BamBam"=>5} (?)
 
 Data Structures:
 
