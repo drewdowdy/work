@@ -136,4 +136,10 @@ people.sort_by do |name, _|
 end
 # => [[:john, 25], [:Kate, 27], [:Mike, 18]]
 
-
+# Other methods that use `<=>` method for comparison
+# - min
+# - max
+# - minmax
+# - min_by
+# - max_by
+# - minmax_by
