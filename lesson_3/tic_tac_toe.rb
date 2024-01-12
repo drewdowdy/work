@@ -16,6 +16,7 @@ end
 def display_board(brd)
   system 'clear'
   puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
+  puts 'Best of 5 wins.'
   puts ''
   puts '     |     |'
   puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
@@ -44,8 +45,8 @@ end
 
 def joinor(array, separator = ', ', last_word = 'or')
   case array.size
-  when 0 then ''
-  when 1 then array.first.to_s
+  when 0 then array.join
+  when 1 then array.join
   when 2 then array.join( " #{last_word} ")
   else
     array[-1] = "#{last_word} #{array.last}"
@@ -90,12 +91,17 @@ def detect_winner(brd)
   nil
 end
 
+player_score = 0
+computer_score = 0
+
 loop do
   board = initialize_board
   display_board(board)
 
   loop do # main game loop
     display_board(board)
+
+    puts "Player: #{player_score} Computer: #{computer_score}"
 
     player_marks!(board)
     break if someone_won?(board) || board_full?(board)
@@ -108,13 +114,28 @@ loop do
 
   if someone_won?(board)
     prompt "#{detect_winner(board)} won!"
+
+    if detect_winner(board) == 'Player'
+      player_score += 1
+    elsif detect_winner(board) == 'Computer'
+      computer_score += 1
+    end
+  
   else
     prompt "It's a tie!"
   end
 
-  prompt 'Play again? (y/n)'
+  break if player_score == 5 || computer_score == 5 
+  
+  prompt "Continue? (y/n)"
   answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  break if answer.downcase.start_with?('n')
+end
+
+if computer_score == 5
+  prompt 'Computer is the ultimate winner!'
+elsif player_score == 5
+  prompt 'Player is the ultimate winner!'
 end
 
 prompt 'Thanks for playing Tic Tac Toe! Goodbye.'
