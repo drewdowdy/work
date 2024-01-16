@@ -86,9 +86,9 @@ end
 def mark_board!(brd, current_player)
   square = ''
 
-  if current_player == 'p'
+  if current_player == 'p'                            # player marks the board
     loop do
-      prompt "Choose a square (#{joinor(empty_squares(brd))}):" # player marks the board
+      prompt "Choose a square (#{joinor(empty_squares(brd))}):" 
       square = gets.chomp.to_i
       break if empty_squares(brd).include?(square)
 
@@ -96,8 +96,8 @@ def mark_board!(brd, current_player)
     end
 
     brd[square] = PLAYER_MARKER
-  elsif current_player == 'c'
-    WINNING_LINES.each do |line|                         # computer marks the board
+  elsif current_player == 'c'                          # computer marks the board
+    WINNING_LINES.each do |line|
       square = ideal_square(line, brd, COMPUTER_MARKER)  # finds offense move
       break if square                                  
     end
