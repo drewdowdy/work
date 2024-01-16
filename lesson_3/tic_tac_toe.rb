@@ -17,7 +17,7 @@ def display_board(brd)
   system 'clear'
   puts '=' * 40
   puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}.".center(40)
-  puts 'Best of 5 wins.'.center(40)
+  puts "Best of 5 wins".center(40)
   puts '=' * 40
   puts ''
   puts '|     |'.center(40)                               #      |    |
@@ -85,10 +85,10 @@ end
 
 def mark_board!(brd, current_player)
   square = ''
-  
+
   if current_player == 'p'
     loop do
-      prompt "Choose a square (#{joinor(empty_squares(brd))}):"
+      prompt "Choose a square (#{joinor(empty_squares(brd))}):" # player marks the board
       square = gets.chomp.to_i
       break if empty_squares(brd).include?(square)
 
@@ -97,14 +97,14 @@ def mark_board!(brd, current_player)
 
     brd[square] = PLAYER_MARKER
   elsif current_player == 'c'
-    WINNING_LINES.each do |line|
-      square = ideal_square(line, brd, COMPUTER_MARKER)  # offense
+    WINNING_LINES.each do |line|                         # computer marks the board
+      square = ideal_square(line, brd, COMPUTER_MARKER)  # finds offense move
       break if square                                  
     end
 
     if !square
       WINNING_LINES.each do |line|      
-        square = ideal_square(line, brd, PLAYER_MARKER)  # defense
+        square = ideal_square(line, brd, PLAYER_MARKER)  # finds defense move
         break if square                                  
       end
     end
@@ -114,9 +114,10 @@ def mark_board!(brd, current_player)
     end
 
     if !square
-      square = empty_squares(brd).sample # chooses randomly if no offense, defense, or 5
+      square = empty_squares(brd).sample # chooses randomly if no offense, defense, or sqr 5
     end
 
+    sleep 0.5
     brd[square] = COMPUTER_MARKER
   end
 end
