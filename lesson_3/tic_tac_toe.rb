@@ -91,6 +91,10 @@ def computer_marks!(brd)
   end
 
   if !square
+    square = 5 if empty_squares(brd).include?(5) # choose square 5 if available
+  end
+
+  if !square
     square = empty_squares(brd).sample # chooses randomly if there is no ideal square
   end
 
