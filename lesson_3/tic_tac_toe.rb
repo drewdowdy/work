@@ -137,14 +137,14 @@ loop do
   first_player = nil
 
   loop do                                                                   # decide the first player
-  prompt "Who should go first? 'Player', 'Computer', or 'I don't care'? (p/c/idc)"
-  first_player = gets.chomp
-  
-  break if first_player.downcase.start_with?('p') || first_player.downcase.start_with?('c') || first_player.downcase == 'idc'
-
-  prompt "Please type 'p' for Player, 'c' for Computer or 'idc' for I don't care."
-
-  sleep 0.5
+    prompt "Who should go first? 'Player', 'Computer', or 'I don't care'? (p/c/idc)"
+    first_player = gets.chomp
+    
+    break if first_player.downcase.start_with?('p') || first_player.downcase.start_with?('c') || first_player.downcase == 'idc'
+    
+    prompt "Please type 'p' for Player, 'c' for Computer or 'idc' for I don't care."
+    
+    sleep 0.5
   end
   
   if first_player.downcase == 'idc'
