@@ -20,17 +20,17 @@ def display_board(brd)
   puts 'Best of 5 wins.'.center(40)
   puts '=' * 40
   puts ''
-  puts '|     |'.center(40)
-  puts "#{brd[1]}  |  #{brd[2]}  |  #{brd[3]}".center(40)
-  puts '|     |'.center(40)
-  puts '-----+-----+-----'.center(40)
-  puts '|     |'.center(40)
-  puts "#{brd[4]}  |  #{brd[5]}  |  #{brd[6]}".center(40)
-  puts '|     |'.center(40)
-  puts '-----+-----+-----'.center(40)
-  puts '|     |'.center(40)
-  puts "#{brd[7]}  |  #{brd[8]}  |  #{brd[9]}".center(40)
-  puts '|     |'.center(40)
+  puts '|     |'.center(40)                               #      |    |
+  puts "#{brd[1]}  |  #{brd[2]}  |  #{brd[3]}".center(40) #      |    |
+  puts '|     |'.center(40)                               #      |    |
+  puts '-----+-----+-----'.center(40)                     # -----+-----+-----
+  puts '|     |'.center(40)                               #      |    |
+  puts "#{brd[4]}  |  #{brd[5]}  |  #{brd[6]}".center(40) #      |    |
+  puts '|     |'.center(40)                               #      |    |
+  puts '-----+-----+-----'.center(40)                     # -----+-----+-----
+  puts '|     |'.center(40)                               #      |    |
+  puts "#{brd[7]}  |  #{brd[8]}  |  #{brd[9]}".center(40) #      |    |
+  puts '|     |'.center(40)                               #      |    |
   puts ''
 end
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
@@ -168,7 +168,7 @@ loop do
 
     mark_board!(board, current_player)
     current_player = alternate_player(current_player)
-    
+
     break if someone_won?(board) || board_full?(board)
   end
 
