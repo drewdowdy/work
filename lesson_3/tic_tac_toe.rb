@@ -91,11 +91,11 @@ def computer_marks!(brd)
   end
 
   if !square
-    square = 5 if empty_squares(brd).include?(5) # choose square 5 if available
+    square = 5 if empty_squares(brd).include?(5) # chooses square 5 if available
   end
 
   if !square
-    square = empty_squares(brd).sample # chooses randomly if there is no ideal square
+    square = empty_squares(brd).sample # chooses randomly if no offense, defense, or 5
   end
 
   brd[square] = COMPUTER_MARKER
@@ -125,23 +125,59 @@ computer_score = 0
 
 loop do
   board = initialize_board
-  display_board(board)
 
-  loop do # main game loop
+  system 'clear'
+
+  puts '=' * 40
+  puts 'Welcome to Tic Tac Toe!'.center(40)
+  puts '=' * 40
+
+  sleep 0.5
+
+  first_player = nil
+
+  loop do                                                                   # decide the first player
+  prompt "Who should go first? 'Player', 'Computer', or 'I don't care'? (p/c/idc)"
+  first_player = gets.chomp
+  
+  break if first_player.downcase.start_with?('p') || first_player.downcase.start_with?('c') || first_player.downcase == 'idc'
+
+  prompt "Please type 'p' for Player, 'c' for Computer or 'idc' for I don't care."
+
+  sleep 0.5
+  end
+  
+  if first_player.downcase == 'idc'
+    first_player = ['p','c'].sample
+  end
+
+  loop do                 # main game loop
     display_board(board)
 
     puts "Player: #{player_score} Computer: #{computer_score}"
 
-    player_marks!(board)
-    break if someone_won?(board) || board_full?(board)
+    if first_player.downcase.start_with?('p')           # player first loop
+      player_marks!(board)
+      break if someone_won?(board) || board_full?(board)
 
-    computer_marks!(board)
-    break if someone_won?(board) || board_full?(board)
+      display_board(board)
+
+      computer_marks!(board)
+      break if someone_won?(board) || board_full?(board)
+    elsif first_player.downcase.start_with?('c')         # computer first loop
+      computer_marks!(board)
+      break if someone_won?(board) || board_full?(board)
+
+      display_board(board)
+
+      player_marks!(board)
+      break if someone_won?(board) || board_full?(board)
+    end
   end
 
   display_board(board)
 
-  if someone_won?(board)
+  if someone_won?(board)                   # display the winner
     prompt "#{detect_winner(board)} won!"
 
     if detect_winner(board) == 'Player'
@@ -167,6 +203,9 @@ if computer_score == 5
   prompt 'Computer is the ultimate winner!'
 elsif player_score == 5
   prompt 'Player is the ultimate winner!'
+elsif player_score == 5 && computer_score == 5
+  prompt "You're both the ultimate winner!"
 end
 
+sleep 0.5
 prompt 'Thanks for playing Tic Tac Toe! Goodbye.'
