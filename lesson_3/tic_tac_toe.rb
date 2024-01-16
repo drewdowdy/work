@@ -67,8 +67,24 @@ def player_marks!(brd)
   brd[square] = PLAYER_MARKER
 end
 
+def risky_square(line, brd)
+  if brd.values_at(*line).count(PLAYER_MARKER) == 2
+    brd.select { |k,v| line.include?(k) && v == ' ' }.keys.first
+  else
+    nil
+  end
+end
+
 def computer_marks!(brd)
-  square = empty_squares(brd).sample
+  square = nil
+
+  WINNING_LINES.each do |line|       # checks all winning lines for 2 X's in a row
+    square = risky_square(line, brd)
+    break if square                  # breaks out if `square` becomes truthy (has a number)
+  end
+
+  square = empty_squares(brd).sample if !square # chooses randomly if the `# each` iteration doesn't find any risky squares
+
   brd[square] = COMPUTER_MARKER
 end
 
@@ -122,7 +138,9 @@ loop do
     end
   
   else
-    prompt "It's a tie!"
+    prompt "It's a tie! Both get points!"
+    player_score += 1
+    computer_score += 1
   end
 
   break if player_score == 5 || computer_score == 5 
