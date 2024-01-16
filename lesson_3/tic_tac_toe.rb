@@ -15,20 +15,22 @@ end
 # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 def display_board(brd)
   system 'clear'
-  puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}."
-  puts 'Best of 5 wins.'
+  puts '=' * 40
+  puts "You are #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}.".center(40)
+  puts 'Best of 5 wins.'.center(40)
+  puts '=' * 40
   puts ''
-  puts '     |     |'
-  puts "  #{brd[1]}  |  #{brd[2]}  |  #{brd[3]}"
-  puts '     |     |'
-  puts '-----+-----+-----'
-  puts '     |     |'
-  puts "  #{brd[4]}  |  #{brd[5]}  |  #{brd[6]}"
-  puts '     |     |'
-  puts '-----+-----+-----'
-  puts '     |     |'
-  puts "  #{brd[7]}  |  #{brd[8]}  |  #{brd[9]}"
-  puts '     |     |'
+  puts '|     |'.center(40)
+  puts "#{brd[1]}  |  #{brd[2]}  |  #{brd[3]}".center(40)
+  puts '|     |'.center(40)
+  puts '-----+-----+-----'.center(40)
+  puts '|     |'.center(40)
+  puts "#{brd[4]}  |  #{brd[5]}  |  #{brd[6]}".center(40)
+  puts '|     |'.center(40)
+  puts '-----+-----+-----'.center(40)
+  puts '|     |'.center(40)
+  puts "#{brd[7]}  |  #{brd[8]}  |  #{brd[9]}".center(40)
+  puts '|     |'.center(40)
   puts ''
 end
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
@@ -141,9 +143,9 @@ loop do
     first_player = gets.chomp
     
     break if first_player.downcase.start_with?('p') || first_player.downcase.start_with?('c') || first_player.downcase == 'idc'
-    
+
     prompt "Please type 'p' for Player, 'c' for Computer or 'idc' for I don't care."
-    
+
     sleep 0.5
   end
   
@@ -154,7 +156,9 @@ loop do
   loop do                 # main game loop
     display_board(board)
 
-    puts "Player: #{player_score} Computer: #{computer_score}"
+    puts '=' * 40
+    puts "Player: #{player_score} Computer: #{computer_score}".center(40)
+    puts '=' * 40
 
     if first_player.downcase.start_with?('p')           # player first loop
       player_marks!(board)
@@ -187,15 +191,24 @@ loop do
     end
   
   else
-    prompt "It's a tie! Both get points!"
+    prompt "It's a tie! Both get 1 point!"
     player_score += 1
     computer_score += 1
   end
 
   break if player_score == 5 || computer_score == 5 
+
+  answer = nil
   
-  prompt "Continue? (y/n)"
-  answer = gets.chomp
+  loop do
+    prompt "Continue? (y/n)"
+    answer = gets.chomp
+    break if answer.downcase.start_with?('n')
+
+    prompt "Please type 'y' or 'n'."
+    sleep 0.5
+  end
+
   break if answer.downcase.start_with?('n')
 end
 
