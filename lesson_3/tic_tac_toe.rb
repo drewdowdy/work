@@ -84,9 +84,9 @@ def detect_winner(brd)
 end
 
 def mark_board!(brd, current_player)
+  square = ''
+  
   if current_player == 'p'
-    square = ''
-
     loop do
       prompt "Choose a square (#{joinor(empty_squares(brd))}):"
       square = gets.chomp.to_i
@@ -97,8 +97,6 @@ def mark_board!(brd, current_player)
 
     brd[square] = PLAYER_MARKER
   elsif current_player == 'c'
-    square = nil
-
     WINNING_LINES.each do |line|
       square = ideal_square(line, brd, COMPUTER_MARKER)  # offense
       break if square                                  
@@ -196,7 +194,7 @@ loop do
   loop do
     prompt "Continue? (y/n)"            # `continue?` prompt after each round
     answer = gets.chomp
-    break if answer.downcase.start_with?('n')
+    break if answer.downcase.start_with?('n') || answer.downcase.start_with?('y')
 
     prompt "Please type 'y' or 'n'."
     sleep 0.5
