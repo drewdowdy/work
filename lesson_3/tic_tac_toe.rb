@@ -78,14 +78,14 @@ end
 def computer_marks!(brd)
   square = nil
 
-  WINNING_LINES.each do |line|      
-    square = ideal_square(line, brd, PLAYER_MARKER)  # defense
+  WINNING_LINES.each do |line|
+    square = ideal_square(line, brd, COMPUTER_MARKER)  # offense
     break if square                                  
   end
 
   if !square
-    WINNING_LINES.each do |line|
-      square = ideal_square(line, brd, COMPUTER_MARKER)  # offense
+    WINNING_LINES.each do |line|      
+      square = ideal_square(line, brd, PLAYER_MARKER)  # defense
       break if square                                  
     end
   end
