@@ -4,10 +4,10 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
-def initialize_deck
+def card_values
   all_cards = {}
-  suits = ['diamonds', 'clubs', 'hearts', 'spades']
-  
+  suits = %w[diamonds clubs hearts spades]
+
   suits.each do |suit|
     (2..10).each do |num|
       all_cards["#{num} of #{suit}"] = num
@@ -29,15 +29,14 @@ def deal_card!(deck)
 end
 
 def total(hand)
-  values = initialize_deck
   total = 0
   hand.each do |key|
-    num = values[key]
+    num = card_values[key]
     total += num
   end
 
   if total > 21
-    hand.select{|card| card.include?('ace')}.count.times do # makes 'ace' worth 1 if total is over 21
+    hand.select { |card| card.include?('ace') }.count.times do # makes 'ace' worth 1 if total is over 21
       total -= 10
     end
   end
@@ -56,7 +55,7 @@ def display_rules
   puts '=' * 60
   puts 'Rules of Twenty-One'.center(60)
   puts '=' * 60
-  puts 'Goal:' 
+  puts 'Goal:'
   puts '  - Get as close to 21 without going over.'
   puts '  - If you go over 21, it\'s a "bust" and you lose.'
   puts ''
@@ -82,11 +81,11 @@ def who_wins?(player_hand, dealer_hand)
   dealer_total = total(dealer_hand)
 
   if player_total > 21 || (21 - player_total).abs > (21 - dealer_total).abs
-    return 'Dealer'
+    'Dealer'
   elsif dealer_total > 21 || (21 - dealer_total).abs > (21 - player_total).abs
-    return 'Player'
+    'Player'
   elsif player_total == dealer_total
-    return 'Everyone'
+    'Everyone'
   end
 end
 
@@ -101,7 +100,7 @@ prompt "To see the rules, press 'r'."
 prompt "To play the game, press 'p'."
 answer = nil
 
-loop do 
+loop do
   answer = gets.chomp.downcase
   if answer == 'p'
     break
@@ -109,15 +108,15 @@ loop do
     display_rules
     answer = gets.chomp.downcase
   end
-  break if answer == 'p' || answer == 'q'
+  break if %w[p q].include?(answer)
+
   puts "Please type 'q' to quit or 'p' to play."
 end
 
 loop do # main game loop
   break if answer == 'q'
 
-  card_values = initialize_deck
-  deck = initialize_deck.keys
+  deck = card_values.keys
 
   player_hand = [deal_card!(deck), deal_card!(deck)]
   dealer_hand = [deal_card!(deck), deal_card!(deck)]
@@ -127,16 +126,16 @@ loop do # main game loop
 
   loop do # Player Turn
     move = nil
-    loop do 
+    loop do
       prompt 'What will you do now? Hit or Stay? (h/s)'
       move = gets.chomp.downcase
+      break if %w[h s].include?(move)
 
-      break if move == 'h' || move == 's'
       prompt "Please type 'h' for hit or 's' for stay."
       sleep(0.5)
     end
-
     break if move == 's'
+
     sleep(0.5)
 
     player_hand << deal_card!(deck) if move == 'h'
@@ -147,6 +146,7 @@ loop do # main game loop
 
   loop do # Dealer Turn
     break if total(dealer_hand) >= 17
+
     dealer_hand << deal_card!(deck)
     prompt 'The dealer chose to hit!'
     sleep 0.5
@@ -180,8 +180,8 @@ loop do # main game loop
   loop do # Play again?
     prompt 'Do you want to play again? (y/n)'
     continue = gets.chomp.downcase
-    break if continue == 'n' || continue == 'y'
-    
+    break if %w[y n].include?(continue)
+
     prompt "Please type 'y' for yes and 'n' for no."
   end
 
