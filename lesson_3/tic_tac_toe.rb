@@ -492,7 +492,7 @@ loop do            # outter game loop
   
 end
 
-if player_num == 1
+if player_num == 2
   case
   when player_1_score == 5
     prompt 'Player is the ultimate winner!'
@@ -501,7 +501,7 @@ if player_num == 1
   when com_1_score == 5
     prompt 'Computer is the ultimate winner!'
   end
-elsif player_num == 2
+elsif player_num == 1
   case
   when player_1_score == 5
     prompt 'Player 1 is the ultimate winner!'
