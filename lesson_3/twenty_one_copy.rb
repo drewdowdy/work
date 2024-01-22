@@ -5,27 +5,55 @@ def prompt(msg)
 end
 
 def card_values
-  all_cards = {}
-  suits = %w[diamonds clubs hearts spades]
+  values = {}
+  ranks = %w[2 3 4 5 6 7 8 9 10 J Q K A]
+  suits = %w[♦ ♣ ♥ ♠]
 
-  suits.each do |suit|
-    (2..10).each do |num|
-      all_cards["#{num} of #{suit}"] = num
+  ranks.each do |rank|
+    suits.each do |suit|
+      card = generate_card(rank, suit)
+      points = case rank
+              when 'J', 'Q', 'K' then 10
+              when 'A' then 11
+              else rank.to_i
+              end
+      values[card] = points
     end
-
-    all_cards["jack of #{suit}"] = 10
-    all_cards["queen of #{suit}"] = 10
-    all_cards["king of #{suit}"] = 10
-    all_cards["ace of #{suit}"] = 11
   end
 
-  all_cards
+  values
 end
 
-def deal_card!(deck)
-  card = deck.sample
-  deck.delete(card)
+def print_horizontal(cards)
+  lines = cards.transpose.map { |line| line.join('  ') }
+  puts lines.join("\n")
+end
+
+def generate_card(rank, suit)
+  card = [
+    ' _____ ',
+    "|#{rank.ljust(5)}|",
+    '|     |',
+    "|  #{suit}  |",
+    '|     |',
+    rank.length == 2 ? "|___#{rank}|" : "|____#{rank}|"
+  ]
   card
+end
+
+def make_deck
+  deck = []
+  suits = %w[♦ ♣ ♥ ♠]
+  faces = %w[J Q K A]
+  suits.each do |suit|
+    faces.each do |face|
+      (2..10).each do |num|
+        deck << generate_card("#{num}", suit).dup
+      end
+      deck << generate_card(face, suit).dup
+    end
+  end
+  deck
 end
 
 def total(hand)
@@ -80,9 +108,13 @@ def who_wins?(player_hand, dealer_hand)
   player_total = total(player_hand)
   dealer_total = total(dealer_hand)
 
-  if player_total > 21 || (21 - player_total).abs > (21 - dealer_total).abs
+  if player_total > 21 
     'The dealer'
-  elsif dealer_total > 21 || (21 - dealer_total).abs > (21 - player_total).abs
+  elsif dealer_total > 21
+    'The player'
+  elsif (21 - player_total).abs > (21 - dealer_total).abs
+    'The dealer'
+  elsif (21 - dealer_total).abs > (21 - player_total).abs
     'The player'
   elsif player_total == dealer_total
     'Everyone'
@@ -116,16 +148,20 @@ end
 loop do # main game loop
   break if answer == 'q'
 
-  deck = card_values.keys
+  deck = make_deck.shuffle
 
-  player_hand = [deal_card!(deck), deal_card!(deck)]
-  dealer_hand = [deal_card!(deck), deal_card!(deck)]
+  player_hand = [deck.pop, deck.pop]
+  dealer_hand = [deck.pop, deck.pop]
 
-  prompt "You and the dealer are being delt 2 cards each."
+  prompt "You and the dealer are being dealt 2 cards each."
   prompt ''
   sleep(1)
-  prompt "The dealer has: #{dealer_hand[0]} and unknown card."
-  prompt "You have: #{player_hand[0]} and #{player_hand[1]}."
+  prompt 'The dealer has one unknown card and:' 
+  puts dealer_hand[0]
+  prompt 'You have:'
+  print_horizontal(player_hand)
+
+
 
   loop do # Player Turn
     move = nil
@@ -141,8 +177,9 @@ loop do # main game loop
 
     sleep(1)
 
-    player_hand << deal_card!(deck) if move == 'h'
-    prompt "Now, you have #{player_hand.join(', ')}."
+    player_hand << deck.pop if move == 'h'
+    prompt 'Now, you have:'
+    print_horizontal(player_hand)
   end
 
   prompt "Now it's the dealer's turn!"
@@ -150,7 +187,7 @@ loop do # main game loop
   loop do # Dealer Turn
     break if total(dealer_hand) >= 17
 
-    dealer_hand << deal_card!(deck)
+    dealer_hand << deck.pop
     prompt 'The dealer chose to hit!'
     sleep(1)
   end
@@ -160,8 +197,10 @@ loop do # main game loop
   sleep(1)
 
   prompt ''
-  prompt "The dealer has #{dealer_hand.join(', ')}."
-  prompt "You have #{player_hand.join(', ')}."
+  prompt 'The dealer has:'
+  print_horizontal(dealer_hand)
+  prompt 'You have:'
+  print_horizontal(player_hand)
   prompt ''
 
   sleep(1)
@@ -176,7 +215,7 @@ loop do # main game loop
 
   winner = who_wins?(player_hand, dealer_hand)
 
-  prompt "#{winner} is the winner!"
+  prompt "#{winner} is the winner!" 
 
   continue = nil
 
