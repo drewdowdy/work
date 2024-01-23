@@ -109,7 +109,7 @@ def display_rules
   puts 'Do you want to quit or play? (q/p)'
 end
 
-def who_wins?(player_total, dealer_total)
+def who_wins(player_total, dealer_total)
   if dealer_total > SCORE_GOAL && player_total > SCORE_GOAL
     'No one'
   elsif player_total > SCORE_GOAL
@@ -215,9 +215,9 @@ loop do # main game loop
   dealer_total = total(dealer_hand)
 
   prompt "You have #{player_total} and the dealer has #{dealer_total}."
-  prompt "#{who_wins?(player_total, dealer_total)} is the winner!"
+  prompt "#{who_wins(player_total, dealer_total)} is the winner!"
 
-  case who_wins?(player_total, dealer_total)
+  case who_wins(player_total, dealer_total)
   when 'The player'
     player_score += 1
   when 'The dealer'
