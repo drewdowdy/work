@@ -47,14 +47,16 @@ def make_deck
   deck = []
   suits = %w[♦ ♣ ♥ ♠]
   faces = %w[J Q K A]
+
   suits.each do |suit|
+    (2..10).each do |num|
+      deck << generate_card(num.to_s, suit).dup
+    end
     faces.each do |face|
-      (2..10).each do |num|
-        deck << generate_card(num.to_s, suit).dup
-      end
       deck << generate_card(face, suit).dup
     end
   end
+  
   deck
 end
 
@@ -125,9 +127,8 @@ def who_wins(player_total, dealer_total)
   end
 end
 
-# ======================================================================
-#              Methods are above, Game code is below.
-# ======================================================================
+
+# Game code:
 
 system 'clear'
 
