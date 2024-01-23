@@ -7,7 +7,7 @@ end
 def generate_card(rank, suit)
   [
     ' _____ ',
-    "|#{rank.ljust(5)}|",
+    rank.length == 2 ? "|#{rank}   |" : "|#{rank}    |",
     '|     |',
     "|  #{suit}  |",
     '|     |',
