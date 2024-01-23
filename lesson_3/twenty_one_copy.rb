@@ -13,10 +13,10 @@ def card_values
     suits.each do |suit|
       card = generate_card(rank, suit)
       points = case rank
-              when 'J', 'Q', 'K' then 10
-              when 'A' then 11
-              else rank.to_i
-              end
+               when 'J', 'Q', 'K' then 10
+               when 'A' then 11
+               else rank.to_i
+               end
       values[card] = points
     end
   end
@@ -30,7 +30,7 @@ def print_horizontal(cards)
 end
 
 def generate_card(rank, suit)
-  card = [
+  [
     ' _____ ',
     "|#{rank.ljust(5)}|",
     '|     |',
@@ -38,7 +38,6 @@ def generate_card(rank, suit)
     '|     |',
     rank.length == 2 ? "|___#{rank}|" : "|____#{rank}|"
   ]
-  card
 end
 
 def make_deck
@@ -48,7 +47,7 @@ def make_deck
   suits.each do |suit|
     faces.each do |face|
       (2..10).each do |num|
-        deck << generate_card("#{num}", suit).dup
+        deck << generate_card(num.to_s, suit).dup
       end
       deck << generate_card(face, suit).dup
     end
@@ -58,13 +57,16 @@ end
 
 def total(hand)
   total = 0
-  hand.each do |key|
-    num = card_values[key]
+  aces = 0
+
+  hand.each do |card|
+    num = card_values[card]
     total += num
+    aces += 1 if card.flatten.include?('A')
   end
 
   if total > 21
-    hand.select { |card| card.include?('ace') }.count.times do # makes 'ace' worth 1 if total is over 21
+    aces.times do
       total -= 10
     end
   end
@@ -104,11 +106,10 @@ def display_rules
   puts 'Do you want to quit or play? (q/p)'
 end
 
-def who_wins?(player_hand, dealer_hand)
-  player_total = total(player_hand)
-  dealer_total = total(dealer_hand)
-
-  if player_total > 21 
+def who_wins?(player_total, dealer_total)
+  if dealer_total > 21 && player_total > 21
+    'No one'
+  elsif player_total > 21
     'The dealer'
   elsif dealer_total > 21
     'The player'
@@ -128,6 +129,7 @@ end
 system 'clear'
 
 display_greeting
+prompt 'Best of 5 rounds is the ultimate winner!'
 prompt "To see the rules, press 'r'."
 prompt "To play the game, press 'p'."
 answer = nil
@@ -145,6 +147,9 @@ loop do
   puts "Please type 'q' to quit or 'p' to play."
 end
 
+player_score = 0
+dealer_score = 0
+
 loop do # main game loop
   break if answer == 'q'
 
@@ -153,15 +158,13 @@ loop do # main game loop
   player_hand = [deck.pop, deck.pop]
   dealer_hand = [deck.pop, deck.pop]
 
-  prompt "You and the dealer are being dealt 2 cards each."
+  prompt 'You and the dealer are being dealt 2 cards each.'
   prompt ''
   sleep(1)
-  prompt 'The dealer has one unknown card and:' 
+  prompt 'The dealer has one unknown card and:'
   puts dealer_hand[0]
   prompt 'You have:'
   print_horizontal(player_hand)
-
-
 
   loop do # Player Turn
     move = nil
@@ -182,17 +185,17 @@ loop do # main game loop
     print_horizontal(player_hand)
   end
 
-  prompt "Now it's the dealer's turn!"
+  prompt "Now it's the dealer's turn."
 
   loop do # Dealer Turn
     break if total(dealer_hand) >= 17
 
     dealer_hand << deck.pop
-    prompt 'The dealer chose to hit!'
+    prompt 'The dealer chose to hit.'
     sleep(1)
   end
 
-  prompt 'The dealer chose to stay!'
+  prompt 'The dealer chose to stay.'
 
   sleep(1)
 
@@ -205,17 +208,33 @@ loop do # main game loop
 
   sleep(1)
 
-  if total(dealer_hand) > 21
-    prompt "The dealer has #{total(dealer_hand)} and busted!"
-  elsif total(player_hand) > 21
-    prompt "You have #{total(player_hand)} and busted!"
-  else
-    prompt "You have #{total(player_hand)} and the dealer has #{total(dealer_hand)}."
+  player_total = total(player_hand)
+  dealer_total = total(dealer_hand)
+
+  prompt "You have #{player_total} and the dealer has #{dealer_total}."
+  prompt "#{who_wins?(player_total, dealer_total)} is the winner!"
+
+  case who_wins?(player_total, dealer_total)
+  when 'The player'
+    player_score += 1
+  when 'The dealer'
+    dealer_score += 1
+  when 'Everyone'
+    player_score += 1
+    dealer_score += 1
   end
 
-  winner = who_wins?(player_hand, dealer_hand)
+  prompt "Rounds won by dealer: #{dealer_score} Rounds won by player: #{player_score}"
 
-  prompt "#{winner} is the winner!" 
+  ultimate_winner = nil
+
+  if player_score == 5
+    ultimate_winner == 'Player'
+  elsif dealer_score == 5
+    ultimate_winner == 'Dealer'
+  end
+
+  puts "The ultimate winner is #{ultimate_winner}!" if ultimate_winner
 
   continue = nil
 
