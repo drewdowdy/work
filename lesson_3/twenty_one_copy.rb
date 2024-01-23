@@ -1,5 +1,8 @@
 require 'pry'
 
+SCORE_GOAL = 21
+DEALER_STAY_NUM = 17
+
 def prompt(msg)
   puts "=> #{msg}"
 end
@@ -65,7 +68,7 @@ def total(hand)
     aces += 1 if card.flatten.include?('A')
   end
 
-  if total > 21
+  if total > SCORE_GOAL
     aces.times do
       total -= 10
     end
@@ -107,15 +110,15 @@ def display_rules
 end
 
 def who_wins?(player_total, dealer_total)
-  if dealer_total > 21 && player_total > 21
+  if dealer_total > SCORE_GOAL && player_total > SCORE_GOAL
     'No one'
-  elsif player_total > 21
+  elsif player_total > SCORE_GOAL
     'The dealer'
-  elsif dealer_total > 21
+  elsif dealer_total > SCORE_GOAL
     'The player'
-  elsif (21 - player_total).abs > (21 - dealer_total).abs
+  elsif (SCORE_GOAL - player_total).abs > (SCORE_GOAL - dealer_total).abs
     'The dealer'
-  elsif (21 - dealer_total).abs > (21 - player_total).abs
+  elsif (SCORE_GOAL - dealer_total).abs > (SCORE_GOAL - player_total).abs
     'The player'
   elsif player_total == dealer_total
     'Everyone'
@@ -188,7 +191,7 @@ loop do # main game loop
   prompt "Now it's the dealer's turn."
 
   loop do # Dealer Turn
-    break if total(dealer_hand) >= 17
+    break if total(dealer_hand) >= DEALER_STAY_NUM
 
     dealer_hand << deck.pop
     prompt 'The dealer chose to hit.'
