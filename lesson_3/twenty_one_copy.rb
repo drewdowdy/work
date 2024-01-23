@@ -134,7 +134,7 @@ prompt "To see the rules, press 'r'."
 prompt "To play the game, press 'p'."
 answer = nil
 
-loop do
+loop do # rules or play?
   answer = gets.chomp.downcase
   if answer == 'p'
     break
