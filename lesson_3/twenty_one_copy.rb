@@ -4,6 +4,17 @@ def prompt(msg)
   puts "=> #{msg}"
 end
 
+def generate_card(rank, suit)
+  [
+    ' _____ ',
+    "|#{rank.ljust(5)}|",
+    '|     |',
+    "|  #{suit}  |",
+    '|     |',
+    rank.length == 2 ? "|___#{rank}|" : "|____#{rank}|"
+  ]
+end
+
 def card_values
   values = {}
   ranks = %w[2 3 4 5 6 7 8 9 10 J Q K A]
@@ -27,17 +38,6 @@ end
 def print_horizontal(cards)
   lines = cards.transpose.map { |line| line.join('  ') }
   puts lines.join("\n")
-end
-
-def generate_card(rank, suit)
-  [
-    ' _____ ',
-    "|#{rank.ljust(5)}|",
-    '|     |',
-    "|  #{suit}  |",
-    '|     |',
-    rank.length == 2 ? "|___#{rank}|" : "|____#{rank}|"
-  ]
 end
 
 def make_deck
