@@ -23,8 +23,8 @@ def card_values
   ranks = %w[2 3 4 5 6 7 8 9 10 J Q K A]
   suits = %w[♦ ♣ ♥ ♠]
 
-  ranks.each do |rank|
-    suits.each do |suit|
+  suits.each do |suit|
+    ranks.each do |rank|
       card = generate_card(rank, suit)
       points = case rank
                when 'J', 'Q', 'K' then 10
@@ -56,7 +56,7 @@ def make_deck
       deck << generate_card(face, suit).dup
     end
   end
-  
+
   deck
 end
 
@@ -216,6 +216,10 @@ loop do # main game loop
   dealer_total = total(dealer_hand)
 
   prompt "You have #{player_total} and the dealer has #{dealer_total}."
+
+  prompt 'You busted!' if player_total > 21
+  prompt 'The dealer busted!' if dealer_total > 21
+
   prompt "#{who_wins(player_total, dealer_total)} is the winner!"
 
   case who_wins(player_total, dealer_total)
